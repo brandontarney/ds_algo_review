@@ -22,7 +22,7 @@ def quicksort( list, lo, hi ):
 	#Create partition of values around an arbitrary pivot val
 	partition_idx = partition(list, lo, hi) 
 	#Recurse on each partitions
-	quicksort(list, lo, partition_idx)
+	quicksort(list, lo, partition_idx - 1) # partition position is now in correct position
 	quicksort(list, partition_idx+1, hi)
 	
 	

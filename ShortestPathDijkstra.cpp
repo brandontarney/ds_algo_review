@@ -9,7 +9,7 @@
 			set shortest path estimate for all vertices other than source to INF,
 			set all predecessors to NIL, shortest path estimate source = 0
 		- Choose the minium distance value vector
-		- Update the distance value for each ADJACENT vector each time a vector is chosen
+		- Update the DISTANCE value for each ADJACENT vector each time a vector is chosen if less than previous minimum
  */
 
 #include<fstream> //<ofstream> & others for files
@@ -23,48 +23,117 @@
 
 using namespace std;
 
-#define NUM_VERTEX = 10;
+const int getMinIndexFromQueue( vertex<int> vertexQueue
 
-list<size_t> findShortestPathDijkstra(list<std::pair<size_t, size_t>> graph[], size_t weights[], size_t source)
+
+const bool isNodeInList(list<pair<int,int>> & nodeList, const int nodeIdx)
 {
-	priority_queue<pair<size_t, size_t> shortestPathEstimate; 
-	size_t predecessorVertex[NUM_VERTEX];
-	initializeSingleSource(graph, shortestPathEstimate, source);
-	shortestPath.push_back(source);
-	priority_queue<pair<size_t, size_t> vertexes();
-	while (!vertex.empty())
+	for (auto & node : nodeList)
 	{
-		vertexIdx = vertexes.pop();k
-		for (auto adjacentVertex : graph[vertexIdx])
+		if (node.second == nodeIdx)
 		{
+			return true;
+		}
+	}
+	return false
+}
 
+const int getMinVertexDistanceIdx( vector<int> & vertexDistances )
+{
+	int minVal = 9999;
+	int minIdx = -1;
+	for ( int i = 0; i < vertexDistances.size(); i++)
+	{
+		if (minVal > vertexDistances[i])
+		{
+			minVal = vertexDistances[i];
+			minIdx = i;
+		}
+	}
+	return minIdx;
+}
+
+list<pair<int, int>> findShortestPathDijkstra(vertex<vertex<pair<int,int>>> & graph, const int startNodeIdx, const int endNodeIdx)
+{
+	vertex<int> vertexDistances; //index is node, value is distance 
+	vertex<int> prevNode; //Index to previous node in this min path
+	vertex<int> exploredState; //Keeps track of those nodes chosen
+	
+	for (int nodeIdx = 0; nodeIdx < graph.size(); nodeIdx++)
+	{
+		vertexDistance[nodeIdx] = 9999;
+		prevNode[nodeIdx] = -1; //This indicates it is NOT in the min path
+		exploredState[nodeIdx] = -1; //This value will be 1 if it's been explored
+	}
+	//Initiatlize start node index to be smallest value
+	vertexDistances[startNodeIdx] = 0; 
+	
+	while (!vertexDistances.empty())
+	{
+		currentVertex = getMinVertexDistance(vertexDistances);
+		if (currentVertex == endNodeIdx)
+		{
+			cout<<"Found the end node, so I must have a min path"<<endl;
+			break;
 		}
 
+		for (auto & adjacentVertexPair : graph[nextVertex])
+		{
+			//Calculate the distance from start node for each adjacent node - update any who are shortest AND not already chosen vertex list
+			adjacentVertex = adjacentVertexPair.second;
+			if (exploredState[adjacentVertex] == -1)
+			{
+				adjacentVertexDistance = vertexDistances[currentVertex] + adjacentvertexPair.first;
+				if (vertexDistances[adjacentVertex] > adjacentVertexDistance)
+				{
+					vertexDistances[adjacentVertex] = adjacentVertexDistance;
+					prevNode[adjacentVertex] = currentVertex;
+				}
+			}
+		}
+		exploredState[currentVertex] = 1;
 		
 	}
 
-
-
 }
 
-void initializeSingleSource(shorestPathEstimate, predecessorVertex, source)
+template<class SequenceOfPairs>
+void printSequencePair(SequenceOfPairs & sequenceOfPairs)
 {
-	/*set shorest path estimate (priority_queue) for all vertices other than source to INF
-	  set all predecessors to NIL
-	  source shortest path estimate = 0
-	  */
+	for (auto tmpPair = sequenceOfPairs.begin(); tmpPair != sequenceOfPairs.end(); ++tmpPair)
+    {
+    	std::cout << tmpPair->first << ',' << tmpPair->second<<endl;
+    }
+    
 }
-
 
 int main()
 {
-	findShortestPathDijkstra(graph, weights, 0);
+/*
+		0
+	  11  12
+	1   2   2
+	  14   2
+		3
+*/
+	vector<vector<pair<int, int>>> graph = {
+			{(11, 1), (12, 2)}, \
+			{(11, 0), (8, 2), (14, 3)}, \
+			{(12, 0), (8, 1), (2, 3)}, \
+			{(14, 1), (2, 2)} \
+			};
+	const int startNodeIdx = 0;
+	const int endNodeIdx = 3;
+	list<pair<int, int>> shortestPath = 
+		findShortestPathDijkstra(graph, startNodeIdx, endNodeIdx);
+		
+	cout<<"Expected path:"<<endl;
+	cout<<"3,2,1,0"<<endl;
+	printSequencePair<list<pair<int,int>>(shortestPath);
 }
-
 
 /*
    CODE FROM GEEKS FOR GEEKS
-   */
 
 // A C++ program for Dijkstra's single source shortest path algorithm.
 // The program is for adjacency matrix representation of the graph
@@ -142,7 +211,7 @@ void dijkstra(int graph[V][V], int src)
 // driver program to test above function
 int main()
 {
-   /* Let us create the example graph discussed above */
+   // Let us create the example graph discussed above 
    int graph[V][V] = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
                       {4, 0, 8, 0, 0, 0, 0, 11, 0},
                       {0, 8, 0, 7, 0, 4, 0, 0, 2},
@@ -158,3 +227,4 @@ int main()
 
     return 0;
 }
+*/
